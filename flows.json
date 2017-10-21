@@ -1,0 +1,277 @@
+[
+    {
+        "id": "fbceeda0.9af09",
+        "type": "tab",
+        "label": "Flow 1"
+    },
+    {
+        "id": "fcd7aa0c.cf7108",
+        "type": "subflow",
+        "name": "FetchAuths",
+        "info": "",
+        "in": [
+            {
+                "x": 58,
+                "y": 57,
+                "wires": [
+                    {
+                        "id": "63fcd4d8.ff1d4c"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 843,
+                "y": 357,
+                "wires": [
+                    {
+                        "id": "d68d3c12.42c76",
+                        "port": 0
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "3faaf6a6.30c44a",
+        "type": "http in",
+        "z": "fbceeda0.9af09",
+        "name": "",
+        "url": "/auth",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 96.5,
+        "y": 177,
+        "wires": [
+            [
+                "d97210cb.2fdaa"
+            ]
+        ]
+    },
+    {
+        "id": "f96a361f.79eba8",
+        "type": "http in",
+        "z": "fbceeda0.9af09",
+        "name": "",
+        "url": "/auth",
+        "method": "post",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 96.5,
+        "y": 319,
+        "wires": [
+            [
+                "21742af0.e2e8f6"
+            ]
+        ]
+    },
+    {
+        "id": "d4230edb.8e6d9",
+        "type": "file",
+        "z": "fbceeda0.9af09",
+        "name": "WriteJsonFile",
+        "filename": "data.json",
+        "appendNewline": false,
+        "createDir": false,
+        "overwriteFile": "true",
+        "x": 620.5,
+        "y": 476,
+        "wires": []
+    },
+    {
+        "id": "65866e96.b65bd",
+        "type": "http response",
+        "z": "fbceeda0.9af09",
+        "name": "",
+        "statusCode": "200",
+        "headers": {},
+        "x": 812.5,
+        "y": 372,
+        "wires": []
+    },
+    {
+        "id": "82f65c8e.65b69",
+        "type": "http in",
+        "z": "fbceeda0.9af09",
+        "name": "",
+        "url": "/auth/:key",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 100.5,
+        "y": 494,
+        "wires": [
+            [
+                "6aa56c14.f8e7b4"
+            ]
+        ]
+    },
+    {
+        "id": "361870d0.7806f",
+        "type": "function",
+        "z": "fbceeda0.9af09",
+        "name": "GenerateToken",
+        "func": "var speakeasy = global.get('speakeasy');\nvar base32 = global.get('base32');\n\nvar secret = msg.secret;\nmsg.payload = \"\";\n\nif (secret) {\n    node.log(secret);\n    var token = speakeasy.totp({\n      secret: secret,\n      encoding: 'base32'\n    });\n\n    var valid = speakeasy.totp.verify({ secret: secret,\n                                       encoding: 'base32',\n                                       token: token });\n\n    msg.payload = {\n        token:token,\n        valid:valid\n    }\n    \n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 655.5,
+        "y": 579,
+        "wires": [
+            [
+                "65866e96.b65bd"
+            ]
+        ]
+    },
+    {
+        "id": "4fa0f09.1dcb41",
+        "type": "function",
+        "z": "fbceeda0.9af09",
+        "name": "AppendNewAuth",
+        "func": "\nmsg.payload.push(msg.auth);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 528.5,
+        "y": 403,
+        "wires": [
+            [
+                "65866e96.b65bd",
+                "d4230edb.8e6d9"
+            ]
+        ]
+    },
+    {
+        "id": "21742af0.e2e8f6",
+        "type": "function",
+        "z": "fbceeda0.9af09",
+        "name": "NewAuth",
+        "func": "\nmsg.auth = {\n    secret:msg.payload.secret,\n    desc:msg.payload.desc,\n    key:msg.payload.key\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 260.5,
+        "y": 332,
+        "wires": [
+            [
+                "5c27a588.d4115c"
+            ]
+        ]
+    },
+    {
+        "id": "63fcd4d8.ff1d4c",
+        "type": "file in",
+        "z": "fcd7aa0c.cf7108",
+        "name": "ReadFile",
+        "filename": "data.json",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "x": 203,
+        "y": 122,
+        "wires": [
+            [
+                "5ab01540.92a6cc"
+            ]
+        ]
+    },
+    {
+        "id": "5ab01540.92a6cc",
+        "type": "function",
+        "z": "fcd7aa0c.cf7108",
+        "name": "HandleEmptyFile",
+        "func": "if (! msg.payload|| /^\\s*$/.test(msg.payload))\n    msg.payload = \"[]\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 420,
+        "y": 206,
+        "wires": [
+            [
+                "d68d3c12.42c76"
+            ]
+        ]
+    },
+    {
+        "id": "d68d3c12.42c76",
+        "type": "json",
+        "z": "fcd7aa0c.cf7108",
+        "name": "ParseJsonFile",
+        "pretty": false,
+        "x": 660,
+        "y": 292,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "5c27a588.d4115c",
+        "type": "subflow:fcd7aa0c.cf7108",
+        "z": "fbceeda0.9af09",
+        "x": 306.5,
+        "y": 406,
+        "wires": [
+            [
+                "4fa0f09.1dcb41"
+            ]
+        ]
+    },
+    {
+        "id": "d97210cb.2fdaa",
+        "type": "subflow:fcd7aa0c.cf7108",
+        "z": "fbceeda0.9af09",
+        "name": "",
+        "x": 288.5,
+        "y": 233,
+        "wires": [
+            [
+                "c77c693.bc1c498"
+            ]
+        ]
+    },
+    {
+        "id": "c77c693.bc1c498",
+        "type": "template",
+        "z": "fbceeda0.9af09",
+        "name": "RenderAuths",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "<ul>\n    {{#payload}}\n    <li>{{key}} - {{secret}} - {{desc}}</li>\n    {{/payload}}\n</ul>",
+        "output": "str",
+        "x": 513.5,
+        "y": 262,
+        "wires": [
+            [
+                "65866e96.b65bd"
+            ]
+        ]
+    },
+    {
+        "id": "6aa56c14.f8e7b4",
+        "type": "subflow:fcd7aa0c.cf7108",
+        "z": "fbceeda0.9af09",
+        "x": 282.5,
+        "y": 513,
+        "wires": [
+            [
+                "b63298f6.db1c68"
+            ]
+        ]
+    },
+    {
+        "id": "b63298f6.db1c68",
+        "type": "function",
+        "z": "fbceeda0.9af09",
+        "name": "FindAuthByKey",
+        "func": "\nfor (var auth of msg.payload) {\n  if (auth.key === msg.req.params.key) {\n      msg.secret = auth.secret;\n      break;\n  }\n}\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 461.5,
+        "y": 544,
+        "wires": [
+            [
+                "361870d0.7806f"
+            ]
+        ]
+    }
+]
