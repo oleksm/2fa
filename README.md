@@ -18,4 +18,5 @@ Assumes that secret is a base32 encoded string. Compatible with most 2FA provide
 
 Navigate: http://127.0.0.1:1880/
 
+More Info: https://hub.docker.com/r/aleksminaiev/2fa/
 
