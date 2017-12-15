@@ -19,6 +19,20 @@
 //var fs = require("fs");
 
 module.exports = {
+
+   swagger: {
+            "template": {
+                "swagger": "2.0",
+                "info": {
+                    "title": "Simple 2FA API service",
+                    "version": "0.0.1",
+            "contact": {
+                    "email": "oleksminaiev@gmail.com"
+            }
+                },
+            }
+        },
+
     // the tcp port that the Node-RED web server is listening on
     uiPort: process.env.PORT || 1880,
 

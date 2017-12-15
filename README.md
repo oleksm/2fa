@@ -14,9 +14,10 @@ Assumes that secret is a base32 encoded string. Compatible with most 2FA provide
 * GET /auth/:key - retrieves auth token by alias name
 
 ## Docker Info
-`docker run -p 1880:1880  aleksminaiev/2fa`
+`docker run -ti -p 1880:1880  aleksminaiev/2fa`
 
 Navigate: http://127.0.0.1:1880/
+Swagger spec: http://127.0.0.1:1880/http-api/swagger.json
 
-More Info: https://hub.docker.com/r/aleksminaiev/2fa/
+Docker hub: https://hub.docker.com/r/aleksminaiev/2fa/
 

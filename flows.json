@@ -34,6 +34,110 @@
         ]
     },
     {
+        "id": "27d04da7.e26d62",
+        "type": "swagger-doc",
+        "z": "",
+        "summary": "fetches stored auth",
+        "description": "",
+        "tags": "",
+        "consumes": "",
+        "produces": "text/html",
+        "parameters": [],
+        "responses": {
+            "200": {
+                "description": "renders a list of stored auths"
+            }
+        },
+        "deprecated": false
+    },
+    {
+        "id": "e2e07284.32bb1",
+        "type": "swagger-doc",
+        "z": "",
+        "summary": "Creates auth",
+        "description": "",
+        "tags": "",
+        "consumes": "application/x-www-form-urlencoded",
+        "produces": "application/json",
+        "parameters": [
+            {
+                "name": "secret",
+                "in": "formData",
+                "description": "Your Authentication Key",
+                "required": true,
+                "type": "string"
+            },
+            {
+                "name": "key",
+                "in": "formData",
+                "description": "Alias name for the Auth",
+                "required": true,
+                "type": "string"
+            },
+            {
+                "name": "desc",
+                "in": "formData",
+                "description": "Some description text",
+                "required": false,
+                "type": "string"
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "Array of stored auths",
+                "schema": {
+                    "properties": {
+                        "secret": {
+                            "type": "string"
+                        },
+                        "key": {
+                            "type": "string"
+                        },
+                        "desc": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "deprecated": false
+    },
+    {
+        "id": "5916c216.cd8cdc",
+        "type": "swagger-doc",
+        "z": "",
+        "summary": "Generates auth token for the provided alias",
+        "description": "",
+        "tags": "",
+        "consumes": "",
+        "produces": "application/json",
+        "parameters": [
+            {
+                "name": "key",
+                "in": "path",
+                "description": "The alias name to fetch token for",
+                "required": true,
+                "type": "string"
+            }
+        ],
+        "responses": {
+            "200": {
+                "description": "json with token data which is valid within 30 seconds",
+                "schema": {
+                    "properties": {
+                        "token": {
+                            "type": "string"
+                        },
+                        "valid": {
+                            "type": "boolean"
+                        }
+                    }
+                }
+            }
+        },
+        "deprecated": false
+    },
+    {
         "id": "3faaf6a6.30c44a",
         "type": "http in",
         "z": "fbceeda0.9af09",
@@ -41,7 +145,7 @@
         "url": "/auth",
         "method": "get",
         "upload": false,
-        "swaggerDoc": "",
+        "swaggerDoc": "27d04da7.e26d62",
         "x": 96.5,
         "y": 177,
         "wires": [
@@ -58,7 +162,7 @@
         "url": "/auth",
         "method": "post",
         "upload": false,
-        "swaggerDoc": "",
+        "swaggerDoc": "e2e07284.32bb1",
         "x": 96.5,
         "y": 319,
         "wires": [
@@ -99,7 +203,7 @@
         "url": "/auth/:key",
         "method": "get",
         "upload": false,
-        "swaggerDoc": "",
+        "swaggerDoc": "5916c216.cd8cdc",
         "x": 100.5,
         "y": 494,
         "wires": [
