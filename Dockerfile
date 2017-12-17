@@ -4,7 +4,7 @@ RUN npm install --save speakeasy@2.0.0
 RUN npm install --save hi-base32@0.3.0
 RUN npm install --save node-red-node-swagger@0.1.8
 
-ADD data.json /usr/src/node-red
+ADD data.json /data/
 ADD settings.js /data/
 ADD flows.json /data/
 
